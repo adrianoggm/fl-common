@@ -1,0 +1,8 @@
+[tool.poetry]
+name = "fl-common"
+version = "0.1.0"
+description = "Shared interfaces & proto defs for our FL system"
+authors = ["Your Name <adrianoggm@correo.ugr.es>"]
+
+[tool.poetry.dependencies]
+protobuf = "^3.20"

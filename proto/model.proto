@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package fl.common;
+
+// raw serialized weights
+message ModelWeights {
+  bytes payload = 1;
+  int64 version = 2;
+}
+
+// a client’s update + sample count for weighting
+message ModelUpdate {
+  bytes diff = 1;
+  int64 sampleCount = 2;
+}
