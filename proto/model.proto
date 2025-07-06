@@ -1,15 +1,43 @@
 syntax = "proto3";
+package fl_common.proto;
 
-package fl.common;
+option java_package = "com.example.fl_common.proto";
+option go_package = "github.com/your_org/fl-common/proto;proto";
 
-// raw serialized weights
-message ModelWeights {
-  bytes payload = 1;
-  int64 version = 2;
+// Mensaje para distribuir parámetros globales del modelo
+message ModelParameters {
+  uint32 round = 1;           // Número de ronda federada
+  bytes weights = 2;          // Pesos serializados del modelo
 }
 
-// a client’s update + sample count for weighting
-message ModelUpdate {
-  bytes diff = 1;
-  int64 sampleCount = 2;
+// Mensaje que envía cada cliente tras entrenamiento local
+message ClientUpdate {
+  string client_id = 1;       // Identificador único del cliente
+  uint32 round = 2;           // Ronda a la que corresponde esta actualización
+  bytes delta_weights = 3;    // Diferencias de peso(serializadas)
+  double local_loss = 4;      // Pérdida local
+  string timestamp = 5;       // Timestamp ISO8601 de la actualización
+}
+
+// Mensaje de agregación parcial enviado al servidor
+message AggregatedUpdate {
+  uint32 round = 1;           // Ronda federada
+  bytes aggregated_delta = 2; // Suma de deltas serializados
+  uint32 num_clients = 3;     // Número de clientes agregados
+  double dp_sigma = 4;        // Sigma de ruido DP aplicado
+}
+
+// Servicio gRPC opcional para federated learning
+service FederatedService {
+  rpc DistributeModel(ModelParameters) returns (Empty);
+  rpc SendClientUpdate(ClientUpdate) returns (Ack);
+  rpc SendAggregatedUpdate(AggregatedUpdate) returns (Empty);
+}
+
+// Mensajes auxiliares
+message Empty {}
+
+message Ack {
+  bool success = 1;          // Estado de la operación
+  string message = 2;        // Mensaje opcional
 }
