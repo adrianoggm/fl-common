@@ -2,7 +2,7 @@ import os
 
 # Topics MQTT para federated learning
 MODEL_DISTRIBUTE_TOPIC = "model/distribute"
-MODEL_UPDATES_TOPIC    = "model/updates"
+MODEL_UPDATES_TOPIC = "model/updates"
 MODEL_AGGREGATED_TOPIC = "model/aggregated"
 
 # Niveles de QoS de MQTT

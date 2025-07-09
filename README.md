@@ -98,20 +98,67 @@ Holds the abstract interfaces and shared logic:
 ### 1. Install dependencies
 
 ```bash
+# Using Poetry (recommended)
 poetry install
+
+# Or using pip
+pip install -r requirements.txt
 ```
 
-### 2. Generate Protobuf bindings
+### 2. Set up development environment
 
 ```bash
-protoc --proto_path=proto --python_out=src --grpc_python_out=src proto/*.proto
+# Install pre-commit hooks
+poetry run pre-commit install
+
+# Generate protobuf files
+make proto
+# Or manually:
+poetry run python -m grpc_tools.protoc --proto_path=proto --python_out=src --grpc_python_out=src proto/*.proto
 ```
 
-### 3. Run tests
+### 3. Run quality checks
 
 ```bash
-poetry run pytest
+# Run all checks
+make all-checks
+
+# Or individually:
+make format-check  # Check code formatting
+make lint         # Run linting
+make type-check   # Run type checking
+make security     # Run security scans
+make test         # Run tests with coverage
 ```
+
+### 4. Development workflow
+
+```bash
+# Format code
+make format
+
+# Run tests
+make test
+
+# Build package
+make build
+```
+
+---
+
+## 🔄 CI/CD Pipeline
+
+This package has its own dedicated CI/CD pipeline that runs:
+
+- **Code Quality Checks**: Black, isort, flake8, mypy
+- **Testing**: pytest with coverage across Python 3.8-3.11
+- **Security Scanning**: bandit, safety
+- **Build & Publish**: Automated package building
+
+The pipeline is triggered on:
+- Push to `main` or `develop` branches (with path filter for `fl-common/`)
+- Pull requests to `main`
+- Manual workflow dispatch
 
 ---
 
